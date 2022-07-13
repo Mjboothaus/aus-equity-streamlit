@@ -9,3 +9,4 @@ run-container:
 
 gcloud-deploy:
 	@gcloud app deploy app.yaml
+
