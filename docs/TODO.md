@@ -1,0 +1,2 @@
+- Replace the example app.py with my own simple AUS equity example & test / deploy
+- Keep working on `justfile` for straight thru test / deploy
