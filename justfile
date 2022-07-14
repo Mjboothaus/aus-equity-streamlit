@@ -1,7 +1,8 @@
 # Docs: https://just.systems/man/en/
 
 project_name := "aus-equity-streamlit"
-app_py := "app.py"
+#app_py := "app.py"
+app_py := "app-stock.py"
 server_port := "8080"
 
 set dotenv-load
