@@ -49,9 +49,9 @@ gcloud-view:
     gcloud app browse
 
 
-gcloud-app-destroy:   # deleting project does not delete app
-
-
+gcloud-app-disable:   # deleting project does not delete app
+    gcloud app versions list
+# gcloud app versions stop {{VERSION.ID}}
 
 # TODO: Need to move billing account as a secret / .env
 
