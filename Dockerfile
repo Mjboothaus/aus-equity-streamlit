@@ -11,6 +11,7 @@ RUN pip install -r requirements.txt
 # copy into a directory of its own (so it isn't in the toplevel dir)
 RUN mkdir -p /app
 COPY app.py app/app.py
+COPY src app/src
 WORKDIR /app
 
 # run it!
