@@ -3,6 +3,7 @@
 
 import json  # working with JSON formatted data
 from pathlib import Path  # working with files/paths nicely
+import streamlit as st
 
 import altair as alt  # charting
 import mplfinance as mpf
@@ -16,6 +17,13 @@ from load_asx_data import load_asx_company_data
 from load_historical_data import get_historical_data
 
 create_app_header("ASX 200 analyser")
+
+start_date = st.sidebar.date_input("Start Date:")
+end_date = st.sidebar.date_input("End Date:")
+
+asx_code = st.sidebar.text_input("ASX code")
+
+#start_date.strftime('%m/%d/%Y')
 
 # A list of companies in the [ASX 200](https://en.wikipedia.org/wiki/S%26P/ASX_200) index and
 # their corresponding symbol (code/ticker); this includes their market cap (i.e. how much they are worth)
@@ -88,10 +96,6 @@ def create_asx200_index():
 
 asx_tickers_df = load_asx_company_data()
 
-start_date = "2021-01-01"
-end_date = "2021-12-31"
-asx_code = "WBC.AX"
-
 price_data_df, tickers = get_historical_data([asx_code], start_date, end_date)
 
 # tickers.key_stats
@@ -116,4 +120,4 @@ def create_close_price_chart(asx_code, price_data_df):
     mpf.show(c)
 
 
-create_close_price_chart(asx_code, price_data_df)
+# create_close_price_chart(asx_code, price_data_df) <-- not currently working
