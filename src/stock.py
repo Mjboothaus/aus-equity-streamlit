@@ -22,7 +22,7 @@ class Stock:
 
     def __init__(self, symbol="GOOG"):
 
-        self.end = datetime.datetime.today()
+        self.end = datetime.datetime.now()
         self.start = self.end - datetime.timedelta(days=4)
         self.symbol = symbol
         self.data = self.load_data(self.start, self.end)
