@@ -1,6 +1,7 @@
-# plotly
-# prophet 
-# scikit_learn
 streamlit
 watchdog
 yfinance
+businessdate
+mplfinance
+yahooquery
+pandas_cache

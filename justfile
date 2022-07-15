@@ -38,7 +38,7 @@ run-container:
     docker run -p {{server_port}}:{{server_port}} {{project_name}}
 
 # in progress
-gcloud-setup
+gcloud-setup:
     gcloud config set region asia-southeast2
     gcloud services enable cloudbuild.googleapis.com
     gcloud config set project {{project_name}}

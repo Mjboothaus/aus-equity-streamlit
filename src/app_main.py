@@ -4,6 +4,7 @@
 import json  # working with JSON formatted data
 from pathlib import Path  # working with files/paths nicely
 import streamlit as st
+import matplotlib.pyplot as plt
 
 import altair as alt  # charting
 import mplfinance as mpf
@@ -11,6 +12,8 @@ import pandas as pd  # 2-d arrays of data
 import requests  # making http (web) requests
 from pandas_cache import pd_cache, timeit
 from yahooquery import Ticker
+from datetime import date
+from businessdate import BusinessDate, BusinessPeriod
 
 from helper_st_app import create_app_header
 from load_asx_data import load_asx_company_data
@@ -18,8 +21,13 @@ from load_historical_data import get_historical_data
 
 create_app_header("ASX 200 analyser")
 
-start_date = st.sidebar.date_input("Start Date:")
-end_date = st.sidebar.date_input("End Date:")
+default_start_date = BusinessDate(BusinessDate.today().year - 1, 1,
+                                  1).to_date()  # 1st Jan previous year
+default_end_date = (BusinessDate.today() -
+                    BusinessPeriod('1B')).to_date()  # Previous business day
+
+start_date = st.sidebar.date_input("Start Date:", default_start_date)
+end_date = st.sidebar.date_input("End Date:", default_end_date)
 
 asx_code = st.sidebar.text_input("ASX code", value="CBA.AX")
 
@@ -98,7 +106,7 @@ asx_tickers_df = load_asx_company_data()
 
 price_data_df, tickers = get_historical_data([asx_code], start_date, end_date)
 
-price_data_df
+default_cols = price_data_df.keys().to_list()
 
 # tickers.key_stats
 # tickers.summary_detail
@@ -108,18 +116,28 @@ profile[asx_code]['website']
 price_data_df["symbol"] = price_data_df.index.get_level_values(0)
 price_data_df["date"] = pd.to_datetime(price_data_df.index.get_level_values(1))
 
-price_data_df
+price_data_df[default_cols]
+
+plt.style.use('ggplot')
 
 def create_close_price_chart(asx_code, price_data_df):
     chart_data_df = price_data_df[price_data_df["symbol"] == asx_code]
     c = alt.Chart(chart_data_df).mark_circle().encode(x='date', y='adjclose')
     chart_data_df.set_index('date', inplace=True)
-    mpf.plot(chart_data_df,
-             type='line',
-             volume=True,
-             show_nontrading=True,
-             datetime_format='%d-%b-%Y')
-    mpf.show(c)
+    return mpf.plot(chart_data_df,
+                    type='line',
+                    volume=True,
+                    show_nontrading=True,
+                    datetime_format='%d-%b-%Y',
+                    returnfig=True,
+                    style="yahoo",
+                    figratio=(2,0.8),
+                    tight_layout=True,
+                    mav=30)
 
 
-# create_close_price_chart(asx_code, price_data_df) <-- not currently working
+fig1, ax1 = create_close_price_chart(asx_code, price_data_df)
+
+col1, col2 = st.columns(2)
+with col1:
+  st.pyplot(fig1)
