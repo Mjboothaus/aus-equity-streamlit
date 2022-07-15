@@ -21,7 +21,7 @@ create_app_header("ASX 200 analyser")
 start_date = st.sidebar.date_input("Start Date:")
 end_date = st.sidebar.date_input("End Date:")
 
-asx_code = st.sidebar.text_input("ASX code")
+asx_code = st.sidebar.text_input("ASX code", value="CBA.AX")
 
 #start_date.strftime('%m/%d/%Y')
 
@@ -97,6 +97,8 @@ def create_asx200_index():
 asx_tickers_df = load_asx_company_data()
 
 price_data_df, tickers = get_historical_data([asx_code], start_date, end_date)
+
+price_data_df
 
 # tickers.key_stats
 # tickers.summary_detail

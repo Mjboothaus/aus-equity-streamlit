@@ -15,4 +15,4 @@ COPY src app/src
 WORKDIR /app
 
 # run it!
-ENTRYPOINT ["streamlit", "run", "app.py", "--server.port=8080", "--server.address=0.0.0.0"]
+ENTRYPOINT ["streamlit", "run", "src/app_main.py", "--server.port=8080", "--server.address=0.0.0.0"]

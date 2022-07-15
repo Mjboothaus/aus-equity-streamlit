@@ -1,6 +1,6 @@
 # Docs: https://just.systems/man/en/
 
-project_name := "aus-equity-streamlit"
+project_name := "aus-equity-streamlit-v2"
 #app_py := "app.py"
 app_py := "src/app_main.py"
 server_port := "8080"
@@ -24,6 +24,8 @@ setup-python-venv:
 run: 
     streamlit run {{app_py}} --server.port={{server_port}} --server.address=localhost
 
+update-reqs:
+    pip-compile requirements.in
 
 # check what instances of streamlit are running
 ps-streamlit:
@@ -35,13 +37,27 @@ run-container:
     docker build . -t {{project_name}}
     docker run -p {{server_port}}:{{server_port}} {{project_name}}
 
-
-# deploy container (including app.py) to Google Cloud (App Engine)
-gcloud-deploy:
-    # gcloud projects delete {{project_name}}
-    gcloud projects create {{project_name}}
+# in progress
+gcloud-setup
+    gcloud config set region asia-southeast2
+    gcloud services enable cloudbuild.googleapis.com
     gcloud config set project {{project_name}}
     gcloud beta billing projects link {{project_name}} --billing-account $BILLING_ACCOUNT_GCP
+
+# deploy container (including app.py) to Google Cloud (App Engine)
+gcloud-deploy-app-engine:
+    # gcloud projects delete {{project_name}}
+    # gcloud projects create {{project_name}}
+    gcloud config set project {{project_name}}
+
+# deploy container to Google Cloud (Cloud Run)
+gcloud-deploy-cloud-run: 
+    gcloud run deploy aus-equity-streamlit --image --source
+
+
+#gcloud builds submit --pack image=[IMAGE] /Users/mjboothaus/code/github/mjboothaus/aus-equity-streamlit/aus-equity-streamlit
+#gcloud run deploy aus-equity-streamlit --image [IMAGE]
+
 
 # gloud init - other stuff?
 # gcloud app deploy app.yaml   (need to do region / )
